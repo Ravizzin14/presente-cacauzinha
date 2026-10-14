@@ -1,400 +1,165 @@
-/*
- * PERSONALIZAÇÃO DO SITE
- * Ajuste relationshipStart para a data real do namoro.
- */
-const CONFIG = {
-  relationshipStart: "2026-03-13T00:00:00",
-  songTitle: "Imprevisto — Yago Oproprio ft. Rô Rosa",
-  audioFile: "",
-  quiz: [
-    {
-      question: "Qual é uma das coisas que eu mais amo em você?",
-      answers: ["Seu jeitinho e sua personalidade", "Só quando você concorda comigo 😅", "Não sei, me conta!"],
-      correct: 0,
-      message: "É isso, meu amor! Seu jeitinho é uma das coisas que te fazem tão especial. ♡"
-    },
-    {
-      question: "Qual é o meu presente favorito?",
-      answers: ["Passar tempo com você", "Um planeta inteiro", "Uma montanha de tarefas"],
-      correct: 0,
-      message: "Acertou! Um momento contigo vale muito pra mim. 🌙"
-    },
-    {
-      question: "Quantos meses estamos comemorando?",
-      answers: ["5 meses", "7 meses", "17 meses"],
-      correct: 1,
-      message: "Sete meses da nossa história — e que venham muitos capítulos lindos! 💗"
-    }
-  ]
-};
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090711">
+  <meta name="description" content="Uma surpresa feita com amor por Ravi para Cacauzinha — nossos 7 meses.">
+  <title>Ravi & Cacauzinha ✦ Nosso universo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="rain-overlay" aria-hidden="true"></div>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="nebula nebula-one" aria-hidden="true"></div>
+  <div class="nebula nebula-two" aria-hidden="true"></div>
+  <div id="hearts" aria-hidden="true"></div>
 
-const $ = (selector) => document.querySelector(selector);
-const relationshipTime = $("#relationshipTime");
-const relationshipSub = $("#relationshipSub");
-const startDate = new Date(CONFIG.relationshipStart);
+  <header class="topbar">
+    <a class="brand" href="#inicio">✦ R <span>♡</span> C</a>
+    <button class="music-toggle" id="musicToggle" type="button" aria-label="Tocar ou pausar música">♫ <span id="musicLabel">Ligar música suave</span></button>
+  </header>
 
-function updateCounter() {
-  if (Number.isNaN(startDate.getTime())) {
-    relationshipTime.textContent = "7 meses de amor";
-    return;
-  }
-  const now = new Date();
-  let months = (now.getFullYear() - startDate.getFullYear()) * 12 + now.getMonth() - startDate.getMonth();
-  if (now.getDate() < startDate.getDate()) months--;
-  months = Math.max(0, months);
-  const anniversary = new Date(startDate);
-  anniversary.setMonth(startDate.getMonth() + months);
-  const days = Math.max(0, Math.floor((now - anniversary) / 86400000));
-  relationshipTime.textContent = `${months} ${months === 1 ? "mês" : "meses"} de amor`;
-  relationshipSub.textContent = days === 0 ? "Um dia especial pra guardar no coração. ♡" : `E mais ${days} ${days === 1 ? "dia" : "dias"} de história juntinhos.`;
-}
-updateCounter();
+  <main>
+    <section class="hero section" id="inicio">
+      <div class="moon" aria-hidden="true"><span></span></div>
+      <p class="eyebrow">UM PEQUENO UNIVERSO SÓ NOSSO</p>
+      <h1>Feliz 7 meses,<br><span>minha Cacauzinha</span> ✨</h1>
+      <p class="hero-copy">Se o universo é infinito, minha vontade de te fazer feliz também é.</p>
+      <button class="primary-btn" id="openSurprise" type="button">Abrir minha surpresa <span>♡</span></button>
+      <p class="scroll-note">desce devagar, meu amor ↓</p>
+      <div class="counter-card glass">
+        <span class="counter-icon">✧</span>
+        <div><small>Nosso tempo juntinhos</small><strong id="relationshipTime">7 meses de amor</strong><p id="relationshipSub">E muitos capítulos lindos pela frente.</p></div>
+      </div>
+    </section>
 
-$("#songTitle").textContent = CONFIG.songTitle;
-$("#musicLabel").textContent = "Clipe oficial";
+    <section class="section" id="historia">
+      <div class="section-heading"><p class="eyebrow">CAPÍTULO 01</p><h2>Nosso universo <span>particular</span></h2><p>Cada lembrança nossa é uma estrelinha que eu guardo com carinho.</p></div>
+      <div class="timeline">
+        <article class="timeline-item"><span class="timeline-dot">♡</span><div class="glass timeline-card"><small>O começo</small><h3>Quando tudo começou</h3><p>Foi o início de uma história que eu quero continuar escrevendo com você.</p></div></article>
+        <article class="timeline-item"><span class="timeline-dot">✦</span><div class="glass timeline-card"><small>Capítulo 02</small><h3>As pequenas coisas</h3><p>As conversas, as risadas, o carinho e cada detalhe que faz você ser tão especial pra mim.</p></div></article>
+        <article class="timeline-item"><span class="timeline-dot">☾</span><div class="glass timeline-card"><small>Hoje · 7 meses</small><h3>Eu ainda escolheria você</h3><p>Em qualquer universo, em qualquer céu, eu ia querer encontrar você de novo.</p></div></article>
+      </div>
+      <p class="hint">Dica: depois, abra <code>script.js</code> para trocar os textos por lembranças reais de vocês.</p>
+    </section>
 
-let ambientContext = null;
-let ambientNodes = [];
-let ambientOn = false;
-let ambientTimer = null;
+    <section class="section" id="fotos">
+      <div class="section-heading"><p class="eyebrow">CAPÍTULO 02</p><h2>Minhas duas <span>favoritas</span> 💗</h2><p>Uma é minha foto favorita… e a outra é a pessoa que eu amo.</p></div>
+      <div class="gallery gallery-two">
+        <figure class="photo-slot"><img src="assets/minha-foto-favorita.png" alt="Minha foto favorita da Cacauzinha"><figcaption><b>Minha foto favorita 📸</b><span>Essa foto tem um lugar especial no meu coração.</span></figcaption></figure>
+        <figure class="photo-slot"><img src="assets/a-que-eu-amo.png" alt="A pessoa que eu amo, Cacauzinha"><figcaption><b>A que eu amo ❤️</b><span>Minha Cacauzinha, meu carinho e meu universo.</span></figcaption></figure>
+      </div>
+    </section>
 
-function stopAmbient() {
-  ambientOn = false;
-  if (ambientTimer) {
-    clearInterval(ambientTimer);
-    ambientTimer = null;
-  }
-  ambientNodes.forEach((node) => {
-    try { node.gain.gain.setTargetAtTime(0.0001, ambientContext.currentTime, 0.25); } catch (_) {}
-    try { node.osc.stop(ambientContext.currentTime + 1); } catch (_) {}
-  });
-  ambientNodes = [];
-  $("#musicLabel").textContent = "Ligar música suave";
-}
+    <section class="section music-section" id="musica">
+      <div class="section-heading"><p class="eyebrow">CAPÍTULO 03</p><h2>A trilha sonora <span>de nós</span> ♫</h2><p>Um cantinho reservado pra música que você ama.</p></div>
+      <div class="glass music-card">
+        <div class="vinyl" aria-hidden="true"><div></div></div>
+        <div class="music-info"><small>TOCANDO NO NOSSO UNIVERSO</small><h3 id="songTitle">Imprevisto — Yago Oproprio ft. Rô Rosa</h3><p>Assista ao clipe aqui mesmo, sem sair do nosso cantinho. 💗</p><div class="video-wrap"><iframe id="youtubePlayer" src="https://www.youtube-nocookie.com/embed/EbVV9FDxM4c?playsinline=1&rel=0&enablejsapi=1" title="Imprevisto — Yago Oproprio ft. Rô Rosa (Clipe Oficial)" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><p class="video-link">Dá play no vídeo acima para assistir e ouvir aqui mesmo. 💗</p></div>
+      </div>
+      <p class="hint">A música suave é opcional: toque em “Ligar música suave”. Quando você der play em “Imprevisto”, o som de fundo para sozinho. O clipe fica aqui na página. ♡</p>
+    </section>
 
-function playAmbientNote(freq, delay = 0) {
-  if (!ambientContext || !ambientOn) return;
-  const osc = ambientContext.createOscillator();
-  const gain = ambientContext.createGain();
-  const filter = ambientContext.createBiquadFilter();
-  osc.type = "sine";
-  osc.frequency.value = freq;
-  filter.type = "lowpass";
-  filter.frequency.value = 650;
-  gain.gain.setValueAtTime(0.0001, ambientContext.currentTime + delay);
-  gain.gain.exponentialRampToValueAtTime(0.035, ambientContext.currentTime + delay + 1.5);
-  gain.gain.setTargetAtTime(0.0001, ambientContext.currentTime + delay + 4.2, 1.2);
-  osc.connect(filter);
-  filter.connect(gain);
-  gain.connect(ambientContext.destination);
-  osc.start(ambientContext.currentTime + delay);
-  osc.stop(ambientContext.currentTime + delay + 8);
-  ambientNodes.push({ osc, gain });
-  osc.onended = () => { ambientNodes = ambientNodes.filter((item) => item.osc !== osc); };
-}
+    <section class="section" id="quiz">
+      <div class="section-heading"><p class="eyebrow">CAPÍTULO 04</p><h2>Quiz do nosso <span>amor</span> 💌</h2><p>Vamos ver se você lembra dessas coisinhas, meu bem?</p></div>
+      <div class="glass quiz-card">
+        <div class="quiz-progress"><span id="quizProgress">PERGUNTA 1 DE 3</span><span id="quizCount">♡ ♡ ♡</span></div>
+        <h3 id="questionText">Qual é uma das coisas que eu mais amo em você?</h3>
+        <div class="answers" id="answers"></div>
+        <p class="quiz-feedback" id="quizFeedback" aria-live="polite"></p>
+        <button class="secondary-btn" id="nextQuestion" type="button" hidden>Próxima pergunta →</button>
+      </div>
+      <p class="hint">As perguntas e respostas são exemplos editáveis. Personalize-as no arquivo <code>script.js</code>.</p>
+    </section>
 
-function startAmbient() {
-  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-  if (!AudioContextClass) {
-    $("#musicLabel").textContent = "Som não compatível";
-    return;
-  }
-  if (!ambientContext) ambientContext = new AudioContextClass();
-  ambientContext.resume();
-  ambientOn = true;
-  $("#musicLabel").textContent = "Pausar música suave";
-  const melody = [261.63, 329.63, 392.00, 329.63, 293.66, 349.23, 440.00, 349.23];
-  let note = 0;
-  const playPhrase = () => {
-    if (!ambientOn) return;
-    playAmbientNote(melody[note % melody.length]);
-    if (note % 4 === 0) playAmbientNote(melody[(note + 2) % melody.length] / 2, 0.15);
-    note++;
-  };
-  playPhrase();
-  ambientTimer = setInterval(playPhrase, 2600);
-}
+    <section class="section letter-section" id="carta">
+      <div class="section-heading"><p class="eyebrow">CAPÍTULO 05</p><h2>Uma cartinha <span>pra você</span> 💗</h2><p>Tem coisas que eu queria te lembrar sempre.</p></div>
+      <div class="letter-envelope glass">
+        <div class="envelope-icon">💌</div>
+        <h3>Uma mensagem do Ravi</h3>
+        <p>Preparei essas palavras especialmente pra você.</p>
+        <button class="primary-btn" id="openLetter" type="button">Abrir cartinha</button>
+        <div class="letter-content" id="letterContent" hidden>
+          <p>Minha Cacauzinha,</p>
+          <p>Feliz 7 meses pra nós! ❤️ Obrigado por fazer parte da minha vida e por transformar tantos momentos simples em lembranças especiais. Eu espero que você nunca esqueça o quanto é importante pra mim.</p>
+          <p>Não preciso de um céu perfeito: só quero continuar criando memórias com você, rindo com você e cuidando do nosso amor, um dia de cada vez.</p>
+          <p>Que esses sete meses sejam só o comecinho de muitos capítulos lindos. Você é uma pessoa muito especial pra mim.</p>
+          <p class="signature">Com todo o meu carinho,<br><strong>Ravi ♡</strong></p>
+          <p class="hint">Você pode editar esta carta diretamente no arquivo index.html.</p>
+        </div>
+      </div>
+    </section>
 
-$("#musicToggle").addEventListener("click", () => {
-  if (ambientOn) stopAmbient();
-  else startAmbient();
-  $("#musica").scrollIntoView({ behavior: "smooth" });
-});
+    <section class="section fun-section" id="cantinho">
+      <div class="section-heading"><p class="eyebrow">PAUSA PRO CORAÇÃO 💞</p><h2>Um cantinho só <span>teu</span></h2><p>Tem coisinhas pra clicar, descobrir e guardar com carinho. Fica o tempo que quiser, meu amor.</p></div>
+      <div class="fun-grid">
+        <article class="glass fun-card"><div class="fun-icon">💌</div><h3>Caixinha de carinho</h3><p id="reasonText">Tem um motivo especial esperando por você...</p><button class="secondary-btn" id="reasonButton" type="button">Tirar um bilhetinho ✨</button></article>
+        <article class="glass fun-card"><div class="fun-icon">🌷</div><h3>Um elogio pra você</h3><p id="complimentText">Aperta aqui quando quiser receber um carinho em palavras.</p><button class="secondary-btn" id="complimentButton" type="button">Quero meu elogio ♡</button></article>
+        <article class="glass fun-card"><div class="fun-icon">🎟️</div><h3>Cupom de amor</h3><p id="couponText">Um cupom especial, válido sempre que tu quiser.</p><button class="secondary-btn" id="couponButton" type="button">Revelar meu cupom</button></article>
+      </div>
+    </section>
 
-let youtubePlayer = null;
-window.onYouTubeIframeAPIReady = function () {
-  if (!window.YT || !window.YT.Player) return;
-  youtubePlayer = new YT.Player("youtubePlayer", {
-    events: {
-      onStateChange: function (event) {
-        if (event.data === YT.PlayerState.PLAYING && ambientOn) stopAmbient();
-      }
-    }
-  });
-};
-const youtubeApi = document.createElement("script");
-youtubeApi.src = "https://www.youtube.com/iframe_api";
-document.head.appendChild(youtubeApi);
+    <section class="section" id="missao">
+      <div class="section-heading"><p class="eyebrow">MISSÃO SECRETA</p><h2>Junta 7 <span>coraçõezinhos</span> 💖</h2><p>Um por cada mês da nossa história. Clica nos corações até completar a missão!</p></div>
+      <div class="glass mission-card">
+        <div class="heart-collection" id="heartCollection" aria-label="Corações encontrados">
+          <button class="collect-heart" type="button" aria-label="Encontrar coração 1">♡</button><button class="collect-heart" type="button" aria-label="Encontrar coração 2">♡</button><button class="collect-heart" type="button" aria-label="Encontrar coração 3">♡</button><button class="collect-heart" type="button" aria-label="Encontrar coração 4">♡</button><button class="collect-heart" type="button" aria-label="Encontrar coração 5">♡</button><button class="collect-heart" type="button" aria-label="Encontrar coração 6">♡</button><button class="collect-heart" type="button" aria-label="Encontrar coração 7">♡</button>
+        </div>
+        <p id="missionProgress">0 de 7 corações encontrados</p>
+        <p id="missionPrize" class="mission-prize" hidden>Missão concluída! 🥹💗 O teu prêmio é um lembrete: tu é muito amada pelo Ravi.</p>
+        <button class="secondary-btn" id="resetMission" type="button">Jogar de novo ↻</button>
+      </div>
+    </section>
 
-$("#openSurprise").addEventListener("click", () => {
-  $("#historia").scrollIntoView({ behavior: "smooth" });
-  spawnHearts(12);
-});
+    <section class="section" id="promessas">
+      <div class="section-heading"><p class="eyebrow">PEQUENAS PROMESSAS</p><h2>O que eu quero <span>viver contigo</span> 🌙</h2><p>Marca as que tu também quer viver comigo — é só uma brincadeira cheia de carinho.</p></div>
+      <div class="glass promises-card">
+        <label class="promise-item"><input type="checkbox"> Continuar rindo das nossas besteiras 😭</label>
+        <label class="promise-item"><input type="checkbox"> Criar lembranças que virem histórias favoritas 📸</label>
+        <label class="promise-item"><input type="checkbox"> Conversar e cuidar um do outro com carinho 💗</label>
+        <label class="promise-item"><input type="checkbox"> Comemorar muitos outros meses juntinhos 🎂</label>
+        <label class="promise-item"><input type="checkbox"> Nunca deixar faltar respeito e sinceridade 🤍</label>
+        <p class="promise-note" id="promiseNote">0 promessas marcadas — escolhe as que fazem sentido pra ti. ♡</p>
+      </div>
+    </section>
 
-const photoImages = document.querySelectorAll("[data-photo]");
-photoImages.forEach((img) => {
-  const path = img.dataset.photo;
-  img.src = path;
-  img.onerror = () => {
-    img.removeAttribute("src");
-    img.closest(".photo-slot")?.classList.add("empty-photo");
-  };
-});
+    <section class="section message-section" id="mensagem">
+      <div class="section-heading"><p class="eyebrow">UM ESPACINHO SÓ TEU 💌</p><h2>Uma cartinha <span>para o Ravi</span> 💗</h2><p>Agora é tua vez, meu amor. Escreve o que estiver no teu coração — vou adorar ler.</p></div>
+      <div class="glass message-card">
+        <div class="message-decoration" aria-hidden="true">✉️</div>
+        <label class="message-label" for="girlfriendMessage">Tua mensagem para mim</label>
+        <textarea id="girlfriendMessage" rows="7" maxlength="3000" placeholder="Meu Ravi, eu queria te dizer que... 💕"></textarea>
+        <div class="message-actions">
+          <button class="primary-btn" id="copyGirlfriendMessage" type="button">Enviar para seu amor Ravi ❤️</button>
+          <button class="secondary-btn" id="clearGirlfriendMessage" type="button">Apagar texto</button>
+        </div>
+        <p class="message-feedback" id="messageFeedback" aria-live="polite">Escreve com calma, meu amor. Cada palavra tua é especial. ♡</p>
+        <p class="message-privacy">Ao tocar em enviar, a cartinha será enviada por e-mail e guardada no painel quando os serviços estiverem configurados.</p>
+      </div>
+    </section>
 
-let questionIndex = 0;
-let score = 0;
-const questionText = $("#questionText");
-const answersEl = $("#answers");
-const feedback = $("#quizFeedback");
-const nextButton = $("#nextQuestion");
+    <section class="section final-section" id="final">
+      <div class="final-star" aria-hidden="true">✧</div>
+      <p class="eyebrow">ÚLTIMA SURPRESA</p>
+      <h2>Se eu pudesse fazer um pedido…</h2>
+      <p class="final-copy">Eu pediria mais momentos, mais risadas, mais abraços e mais capítulos ao seu lado.</p>
+      <button class="primary-btn big-btn" id="finalButton" type="button">Tenho uma pergunta pra você… 💗</button>
+      <div class="final-message glass" id="finalMessage" hidden>
+        <span class="big-heart">♡</span><h3>Cacauzinha, vamos continuar escrevendo nossa história?</h3><p>Obrigada por esses 7 meses. Eu te amo! — Ravi</p>
+        <button class="secondary-btn" id="loveButton" type="button">EU TE AMO ❤️</button>
+        <p id="loveCount" class="love-count" aria-live="polite">Clique se quiser mandar mais amor pro universo ✨</p>
+      </div>
+      <footer>feito com carinho por Ravi para Cacauzinha <span>♡</span></footer>
+    </section>
+  </main>
 
-function renderQuestion() {
-  const q = CONFIG.quiz[questionIndex];
-  $("#quizProgress").textContent = `PERGUNTA ${questionIndex + 1} DE ${CONFIG.quiz.length}`;
-  $("#quizCount").textContent = "♡ ".repeat(questionIndex) + "♥ " + "♡ ".repeat(CONFIG.quiz.length - questionIndex - 1);
-  questionText.textContent = q.question;
-  answersEl.innerHTML = "";
-  feedback.textContent = "";
-  nextButton.hidden = true;
-  q.answers.forEach((answer, index) => {
-    const button = document.createElement("button");
-    button.className = "answer-btn";
-    button.type = "button";
-    button.textContent = answer;
-    button.addEventListener("click", () => {
-      [...answersEl.children].forEach((b) => { b.disabled = true; });
-      if (index === q.correct) {
-        button.classList.add("correct");
-        feedback.textContent = q.message;
-        score++;
-      } else {
-        button.classList.add("wrong");
-        answersEl.children[q.correct]?.classList.add("correct");
-        feedback.textContent = "O importante é que a gente continue descobrindo coisas lindas um sobre o outro. ♡";
-      }
-      nextButton.hidden = false;
-      nextButton.textContent = questionIndex === CONFIG.quiz.length - 1 ? "Ver resultado ✨" : "Próxima pergunta →";
-    });
-    answersEl.appendChild(button);
-  });
-}
-renderQuestion();
-
-nextButton.addEventListener("click", () => {
-  if (questionIndex < CONFIG.quiz.length - 1) {
-    questionIndex++;
-    renderQuestion();
-  } else {
-    questionText.textContent = "Você terminou o quiz, meu amor! 💗";
-    answersEl.innerHTML = "";
-    feedback.textContent = `${score} de ${CONFIG.quiz.length} respostas certas — mas meu maior presente é ter você na minha vida.`;
-    nextButton.hidden = true;
-    $("#quizProgress").textContent = "QUIZ CONCLUÍDO";
-    $("#quizCount").textContent = "♥ ♥ ♥";
-    spawnHearts(16);
-  }
-});
-
-$("#openLetter").addEventListener("click", () => {
-  const content = $("#letterContent");
-  content.hidden = !content.hidden;
-  $("#openLetter").textContent = content.hidden ? "Abrir cartinha" : "Fechar cartinha";
-  if (!content.hidden) spawnHearts(10);
-});
-
-$("#finalButton").addEventListener("click", () => {
-  $("#finalMessage").hidden = false;
-  $("#finalMessage").scrollIntoView({ behavior: "smooth", block: "center" });
-  spawnHearts(22);
-});
-
-let loveClicks = 0;
-$("#loveButton").addEventListener("click", () => {
-  loveClicks++;
-  $("#loveCount").textContent = `O universo recebeu mais ${loveClicks} ${loveClicks === 1 ? "declaração de amor" : "declarações de amor"}! ✨❤️`;
-  spawnHearts(8);
-});
-
-function spawnHearts(amount = 8) {
-  const layer = $("#hearts");
-  const symbols = ["♡", "♥", "✦", "✨"];
-  for (let i = 0; i < amount; i++) {
-    const heart = document.createElement("span");
-    heart.className = "floating-heart";
-    heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-    heart.style.left = `${Math.random() * 100}%`;
-    heart.style.fontSize = `${14 + Math.random() * 20}px`;
-    heart.style.animationDuration = `${3 + Math.random() * 3}s`;
-    layer.appendChild(heart);
-    heart.addEventListener("animationend", () => heart.remove(), { once: true });
-  }
-}
-
-const reasons = [
-  "Porque teu jeitinho deixa meus dias mais especiais. 💗",
-  "Porque conversar contigo pode melhorar qualquer dia.",
-  "Porque tu merece receber carinho sem precisar pedir. 🌷",
-  "Porque amo as pequenas coisas que fazem tu ser tu.",
-  "Porque nossos 7 meses são uma lembrança linda pra mim.",
-  "Porque quero continuar conhecendo cada detalhe teu.",
-  "Porque tu faz parte de várias das minhas lembranças favoritas.",
-  "Porque até uma mensagem simples tua pode me fazer sorrir. ♡",
-  "Porque eu quero construir nossa história com respeito e carinho.",
-  "Porque escolher cuidar do nosso amor é algo que importa."
-];
-const compliments = [
-  "Teu sorriso tem um jeitinho especial de iluminar tudo. ✨",
-  "Tua personalidade é uma das coisas que te tornam única.",
-  "Tu merece ser tratada com carinho, respeito e sinceridade. 🤍",
-  "Tem algo muito bonito no teu jeito de ser.",
-  "Espero que tu nunca esqueça o quanto é especial pra mim. 🌙",
-  "Tu não precisa ser perfeita pra ser importante e amada.",
-  "Eu gosto de descobrir cada detalhe que faz de ti quem tu é. 💞",
-  "Tu merece dias leves, sonhos bonitos e muita felicidade."
-];
-const coupons = [
-  "VALE uma chamada só pra conversar e rir de qualquer coisa 📞",
-  "VALE escolher o próximo filme ou vídeo que vamos ver 🎬",
-  "VALE uma mensagem bem fofinha do Ravi 💌",
-  "VALE uma playlist feita pensando em ti 🎶",
-  "VALE uma conversa calma quando o dia estiver difícil 🤍",
-  "VALE escolher nosso próximo joguinho juntos 🎮",
-  "VALE um momento pra contar como foi teu dia, sem pressa 🌷"
-];
-
-function revealRandom(list, target) {
-  const node = $(target);
-  let index = Math.floor(Math.random() * list.length);
-  if (list.length > 1 && node.dataset.lastIndex !== undefined && Number(node.dataset.lastIndex) === index) {
-    index = (index + 1) % list.length;
-  }
-  node.dataset.lastIndex = String(index);
-  node.textContent = list[index];
-  node.classList.remove("text-pop");
-  void node.offsetWidth;
-  node.classList.add("text-pop");
-}
-$("#reasonButton").addEventListener("click", () => { revealRandom(reasons, "#reasonText"); spawnHearts(5); });
-$("#complimentButton").addEventListener("click", () => { revealRandom(compliments, "#complimentText"); spawnHearts(5); });
-$("#couponButton").addEventListener("click", () => { revealRandom(coupons, "#couponText"); spawnHearts(4); });
-
-let heartsFound = 0;
-const heartButtons = [...document.querySelectorAll(".collect-heart")];
-function updateMission() {
-  $("#missionProgress").textContent = `${heartsFound} de 7 corações encontrados`;
-  $("#missionPrize").hidden = heartsFound !== 7;
-  if (heartsFound === 7) spawnHearts(24);
-}
-heartButtons.forEach((button) => button.addEventListener("click", () => {
-  if (button.classList.contains("found")) return;
-  button.classList.add("found");
-  button.textContent = "♥";
-  heartsFound++;
-  updateMission();
-}));
-$("#resetMission").addEventListener("click", () => {
-  heartsFound = 0;
-  heartButtons.forEach((button) => { button.classList.remove("found"); button.textContent = "♡"; });
-  updateMission();
-});
-
-const promiseChecks = [...document.querySelectorAll(".promise-item input")];
-function updatePromises() {
-  const checked = promiseChecks.filter((input) => input.checked).length;
-  $("#promiseNote").textContent = checked === 0
-    ? "0 promessas marcadas — escolhe as que fazem sentido pra ti. ♡"
-    : `${checked} de ${promiseChecks.length} promessas escolhidas. Que a gente construa tudo com carinho. 💗`;
-}
-promiseChecks.forEach((input) => input.addEventListener("change", updatePromises));
-
-/*
- * CARTINHA: envia ao EmailJS e grava no Supabase.
- * Se um serviço falhar, tenta manter o outro funcionando.
- */
-const girlfriendMessage = $("#girlfriendMessage");
-const messageFeedback = $("#messageFeedback");
-const sendLetterButton = $("#copyGirlfriendMessage");
-const clearLetterButton = $("#clearGirlfriendMessage");
-
-sendLetterButton.addEventListener("click", async () => {
-  const message = girlfriendMessage.value.trim();
-
-  if (!message) {
-    messageFeedback.textContent = "Meu amor, escreve uma cartinha pra mim. Vou guardar cada palavrinha com carinho. 🥹❤️";
-    girlfriendMessage.focus();
-    return;
-  }
-
-  sendLetterButton.disabled = true;
-  messageFeedback.textContent = "Preparando tua cartinha com todo o carinho do mundo... 💌✨";
-
-  let emailSent = false;
-  let savedToDatabase = false;
-
-  try {
-    if (window.emailjs) {
-      try {
-        await window.emailjs.send(
-          "service_ykiix53",
-          "template_poa1fzq",
-          { message }
-        );
-        emailSent = true;
-      } catch (error) {
-        console.error("Erro no EmailJS:", error);
-      }
-    }
-
-    if (window.supabase) {
-      try {
-        const db = window.supabase.createClient(
-          "https://ektxoaljvogbeyyllwvw.supabase.co",
-          "sb_publishable_JE4fy-T8wUDcmRUh0nO0Tw_Jum8bOaX"
-        );
-
-        const { error } = await db
-          .from("respostas_cacau")
-          .insert([{ cartinha: message, quiz_concluido: false }]);
-
-        if (error) throw error;
-        savedToDatabase = true;
-      } catch (error) {
-        console.error("Erro no Supabase:", error);
-      }
-    }
-
-    if (emailSent && savedToDatabase) {
-      messageFeedback.textContent = "Aaaah, tua cartinha chegou! Cada palavra tua deixa meu cantinho mais especial. Te amo, minha princesa! ❤️💌✨";
-      girlfriendMessage.value = "";
-    } else if (emailSent) {
-      messageFeedback.textContent = "Tua cartinha foi recebida com muito carinho! Obrigado por deixar um pedacinho do teu coração aqui. ❤️🥹";
-      girlfriendMessage.value = "";
-    } else if (savedToDatabase) {
-      messageFeedback.textContent = "Tua cartinha foi recebida com muito carinho! Obrigado por deixar um pedacinho do teu coração aqui. ❤️🥹";
-      girlfriendMessage.value = "";
-    } else {
-      messageFeedback.textContent = "Meu amor, vamos tentar enviar tua cartinha mais uma vez? Quero muito guardar essas palavrinhas especiais. 💗💌";
-    }
-  } catch (error) {
-    console.error("Erro inesperado ao enviar a cartinha:", error);
-    messageFeedback.textContent = "Ocorreu um erro inesperado. Tenta novamente. 💗";
-  } finally {
-    sendLetterButton.disabled = false;
-  }
-});
-
-clearLetterButton.addEventListener("click", () => {
-  girlfriendMessage.value = "";
-  messageFeedback.textContent = "Prontinho, meu amor! O espaço está esperando outra cartinha tua. 💕🌷";
-  girlfriendMessage.focus();
-});
+  <audio id="backgroundAudio" loop preload="none"></audio>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    emailjs.init({ publicKey: "vIeeEkB4AloiJFR2t" });
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
