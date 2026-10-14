@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -56,7 +57,13 @@
       <div class="section-heading"><p class="eyebrow">CAPÍTULO 03</p><h2>A trilha sonora <span>de nós</span> ♫</h2><p>Um cantinho reservado pra música que você ama.</p></div>
       <div class="glass music-card">
         <div class="vinyl" aria-hidden="true"><div></div></div>
-        <div class="music-info"><small>TOCANDO NO NOSSO UNIVERSO</small><h3 id="songTitle">Imprevisto — Yago Oproprio ft. Rô Rosa</h3><p>Assista ao clipe aqui mesmo, sem sair do nosso cantinho. 💗</p><div class="video-wrap"><iframe id="youtubePlayer" src="https://www.youtube-nocookie.com/embed/EbVV9FDxM4c?playsinline=1&rel=0&enablejsapi=1" title="Imprevisto — Yago Oproprio ft. Rô Rosa (Clipe Oficial)" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><p class="video-link">Dá play no vídeo acima para assistir e ouvir aqui mesmo. 💗</p></div>
+        <div class="music-info">
+          <small>TOCANDO NO NOSSO UNIVERSO</small>
+          <h3 id="songTitle">Imprevisto — Yago Oproprio ft. Rô Rosa</h3>
+          <p>Assista ao clipe aqui mesmo, sem sair do nosso cantinho. 💗</p>
+          <div class="video-wrap"><iframe id="youtubePlayer" src="https://www.youtube-nocookie.com/embed/EbVV9FDxM4c?playsinline=1&rel=0&enablejsapi=1" title="Imprevisto — Yago Oproprio ft. Rô Rosa (Clipe Oficial)" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+          <p class="video-link">Dá play no vídeo acima para assistir e ouvir aqui mesmo. 💗</p>
+        </div>
       </div>
       <p class="hint">A música suave é opcional: toque em “Ligar música suave”. Quando você der play em “Imprevisto”, o som de fundo para sozinho. O clipe fica aqui na página. ♡</p>
     </section>
@@ -155,13 +162,35 @@
   </main>
 
   <audio id="backgroundAudio" loop preload="auto">
-  <source src="musica.mp3" type="audio/mpeg">
-</audio>
+    <source src="musica.mp3" type="audio/mpeg">
+  </audio>
+
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     emailjs.init({ publicKey: "vIeeEkB4AloiJFR2t" });
   </script>
   <script src="script.js"></script>
+
+  <!-- Alteração somente para tentar iniciar a música de fundo -->
+  <script>
+    (() => {
+      const audio = document.getElementById("backgroundAudio");
+
+      if (!audio) return;
+
+      audio.volume = 0.2;
+
+      const iniciarMusica = () => {
+        audio.play().catch(() => {});
+      };
+
+      iniciarMusica();
+
+      document.addEventListener("pointerdown", iniciarMusica, {
+        once: true
+      });
+    })();
+  </script>
 </body>
 </html>
