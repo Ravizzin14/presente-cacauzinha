@@ -1,24 +1,26 @@
 
-/* Cartinha da Cacauzinha: envia diretamente ao Supabase. */
+/* Cartinha da Cacauzinha: envia diretamente ao Supabase */
 const girlfriendMessage = $("#girlfriendMessage");
 const messageFeedback = $("#messageFeedback");
 
 $("#copyGirlfriendMessage").addEventListener("click", async () => {
   const message = girlfriendMessage.value.trim();
+  const button = $("#copyGirlfriendMessage");
 
   if (!message) {
-    messageFeedback.textContent = "Escreve uma cartinha primeiro, meu amor. 💗";
+    messageFeedback.textContent =
+      "Escreve uma cartinha primeiro, meu amor. 💗";
     girlfriendMessage.focus();
     return;
   }
 
-  const button = $("#copyGirlfriendMessage");
   button.disabled = true;
-  messageFeedback.textContent = "Enviando tua cartinha para o Ravi... 💌";
+  messageFeedback.textContent =
+    "Enviando tua cartinha para o Ravi... 💌";
 
   try {
     if (!window.supabase) {
-      throw new Error("O Supabase não foi carregado.");
+      throw new Error("A biblioteca do Supabase não carregou.");
     }
 
     const db = window.supabase.createClient(
@@ -28,20 +30,35 @@ $("#copyGirlfriendMessage").addEventListener("click", async () => {
 
     const { error } = await db
       .from("respostas_cacau")
-      .insert([{
-        cartinha: message,
-        quiz_concluido: false
-      }]);
+      .insert([
+        {
+          cartinha: message,
+          quiz_concluido: false
+        }
+      ]);
 
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
 
     messageFeedback.textContent =
-      "Cartinha enviada com carinho! ❤️ O Ravi já pode vê-la no painel secreto. 💌";
+      "Cartinha enviada com carinho! ❤️💌";
+
+    girlfriendMessage.value = "";
   } catch (error) {
     console.error("Erro ao enviar cartinha:", error);
+
     messageFeedback.textContent =
-      "Não conseguimos enviar agora. Tenta novamente daqui a pouco. 💗";
+      "Não conseguimos enviar agora. Confere a conexão e tenta novamente. 💗";
   } finally {
     button.disabled = false;
   }
+});
+
+/* Botão para limpar a cartinha */
+$("#clearGirlfriendMessage").addEventListener("click", () => {
+  girlfriendMessage.value = "";
+  messageFeedback.textContent =
+    "Prontinho, podes escrever outra cartinha. ♡";
+  girlfriendMessage.focus();
 });
