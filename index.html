@@ -90,25 +90,12 @@
       </div>
     </section>
 
-
     <section class="section fun-section" id="cantinho">
       <div class="section-heading"><p class="eyebrow">PAUSA PRO CORAÇÃO 💞</p><h2>Um cantinho só <span>teu</span></h2><p>Tem coisinhas pra clicar, descobrir e guardar com carinho. Fica o tempo que quiser, meu amor.</p></div>
       <div class="fun-grid">
-        <article class="glass fun-card">
-          <div class="fun-icon">💌</div><h3>Caixinha de carinho</h3>
-          <p id="reasonText">Tem um motivo especial esperando por você...</p>
-          <button class="secondary-btn" id="reasonButton" type="button">Tirar um bilhetinho ✨</button>
-        </article>
-        <article class="glass fun-card">
-          <div class="fun-icon">🌷</div><h3>Um elogio pra você</h3>
-          <p id="complimentText">Aperta aqui quando quiser receber um carinho em palavras.</p>
-          <button class="secondary-btn" id="complimentButton" type="button">Quero meu elogio ♡</button>
-        </article>
-        <article class="glass fun-card">
-          <div class="fun-icon">🎟️</div><h3>Cupom de amor</h3>
-          <p id="couponText">Um cupom especial, válido sempre que tu quiser.</p>
-          <button class="secondary-btn" id="couponButton" type="button">Revelar meu cupom</button>
-        </article>
+        <article class="glass fun-card"><div class="fun-icon">💌</div><h3>Caixinha de carinho</h3><p id="reasonText">Tem um motivo especial esperando por você...</p><button class="secondary-btn" id="reasonButton" type="button">Tirar um bilhetinho ✨</button></article>
+        <article class="glass fun-card"><div class="fun-icon">🌷</div><h3>Um elogio pra você</h3><p id="complimentText">Aperta aqui quando quiser receber um carinho em palavras.</p><button class="secondary-btn" id="complimentButton" type="button">Quero meu elogio ♡</button></article>
+        <article class="glass fun-card"><div class="fun-icon">🎟️</div><h3>Cupom de amor</h3><p id="couponText">Um cupom especial, válido sempre que tu quiser.</p><button class="secondary-btn" id="couponButton" type="button">Revelar meu cupom</button></article>
       </div>
     </section>
 
@@ -116,13 +103,7 @@
       <div class="section-heading"><p class="eyebrow">MISSÃO SECRETA</p><h2>Junta 7 <span>coraçõezinhos</span> 💖</h2><p>Um por cada mês da nossa história. Clica nos corações até completar a missão!</p></div>
       <div class="glass mission-card">
         <div class="heart-collection" id="heartCollection" aria-label="Corações encontrados">
-          <button class="collect-heart" type="button" aria-label="Encontrar coração 1">♡</button>
-          <button class="collect-heart" type="button" aria-label="Encontrar coração 2">♡</button>
-          <button class="collect-heart" type="button" aria-label="Encontrar coração 3">♡</button>
-          <button class="collect-heart" type="button" aria-label="Encontrar coração 4">♡</button>
-          <button class="collect-heart" type="button" aria-label="Encontrar coração 5">♡</button>
-          <button class="collect-heart" type="button" aria-label="Encontrar coração 6">♡</button>
-          <button class="collect-heart" type="button" aria-label="Encontrar coração 7">♡</button>
+          <button class="collect-heart" type="button" aria-label="Encontrar coração 1">♡</button><button class="collect-heart" type="button" aria-label="Encontrar coração 2">♡</button><button class="collect-heart" type="button" aria-label="Encontrar coração 3">♡</button><button class="collect-heart" type="button" aria-label="Encontrar coração 4">♡</button><button class="collect-heart" type="button" aria-label="Encontrar coração 5">♡</button><button class="collect-heart" type="button" aria-label="Encontrar coração 6">♡</button><button class="collect-heart" type="button" aria-label="Encontrar coração 7">♡</button>
         </div>
         <p id="missionProgress">0 de 7 corações encontrados</p>
         <p id="missionPrize" class="mission-prize" hidden>Missão concluída! 🥹💗 O teu prêmio é um lembrete: tu é muito amada pelo Ravi.</p>
@@ -153,7 +134,7 @@
           <button class="secondary-btn" id="clearGirlfriendMessage" type="button">Apagar texto</button>
         </div>
         <p class="message-feedback" id="messageFeedback" aria-live="polite">Escreve com calma, meu amor. Cada palavra tua é especial. ♡</p>
-        <p class="message-privacy">Ao tocar em enviar, podes compartilhar a cartinha pelo menu do teu aparelho. O envio direto para o painel secreto do Ravi será ativado quando conectarmos o sistema de mensagens.</p>
+        <p class="message-privacy">Ao tocar em enviar, a cartinha será enviada por e-mail e guardada no painel quando os serviços estiverem configurados.</p>
       </div>
     </section>
 
@@ -164,9 +145,7 @@
       <p class="final-copy">Eu pediria mais momentos, mais risadas, mais abraços e mais capítulos ao seu lado.</p>
       <button class="primary-btn big-btn" id="finalButton" type="button">Tenho uma pergunta pra você… 💗</button>
       <div class="final-message glass" id="finalMessage" hidden>
-        <span class="big-heart">♡</span>
-        <h3>Cacauzinha, vamos continuar escrevendo nossa história?</h3>
-        <p>Obrigada por esses 7 meses. Eu te amo! — Ravi</p>
+        <span class="big-heart">♡</span><h3>Cacauzinha, vamos continuar escrevendo nossa história?</h3><p>Obrigada por esses 7 meses. Eu te amo! — Ravi</p>
         <button class="secondary-btn" id="loveButton" type="button">EU TE AMO ❤️</button>
         <p id="loveCount" class="love-count" aria-live="polite">Clique se quiser mandar mais amor pro universo ✨</p>
       </div>
@@ -175,6 +154,11 @@
   </main>
 
   <audio id="backgroundAudio" loop preload="none"></audio>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    emailjs.init({ publicKey: "vIeeEkB4AloiJFR2t" });
+  </script>
   <script src="script.js"></script>
 </body>
 </html>
