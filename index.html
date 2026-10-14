@@ -3,10 +3,6 @@
 const girlfriendMessage = $("#girlfriendMessage");
 const messageFeedback = $("#messageFeedback");
 
-emailjs.init({
-  publicKey: "vIeeEkB4AloiJFR2t"
-});
-
 $("#copyGirlfriendMessage").addEventListener("click", async () => {
   const message = girlfriendMessage.value.trim();
   const button = $("#copyGirlfriendMessage");
@@ -18,12 +14,18 @@ $("#copyGirlfriendMessage").addEventListener("click", async () => {
     return;
   }
 
+  if (!window.emailjs) {
+    messageFeedback.textContent =
+      "O serviço de e-mail não carregou. Atualiza a página e tenta novamente. 💗";
+    return;
+  }
+
   button.disabled = true;
   messageFeedback.textContent =
     "Enviando tua cartinha para o Ravi... 💌";
 
   try {
-    await emailjs.send(
+    await window.emailjs.send(
       "service_ykiix53",
       "template_poa1fzq",
       {
@@ -33,14 +35,20 @@ $("#copyGirlfriendMessage").addEventListener("click", async () => {
 
     messageFeedback.textContent =
       "Cartinha enviada para o Ravi! ❤️💌";
-
   } catch (error) {
     console.error("Erro ao enviar a cartinha:", error);
 
     messageFeedback.textContent =
-      "Não foi possível enviar agora. Confere a conexão e tenta novamente. 💗";
-
+      "Não foi possível enviar. Confere o EmailJS e tenta novamente. 💗";
   } finally {
     button.disabled = false;
   }
+});
+
+/* Botão para limpar a cartinha */
+$("#clearGirlfriendMessage").addEventListener("click", () => {
+  girlfriendMessage.value = "";
+  messageFeedback.textContent =
+    "Prontinho, podes escrever outra cartinha. ♡";
+  girlfriendMessage.focus();
 });
