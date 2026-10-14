@@ -1,54 +1,36 @@
 
-/* Cartinha da Cacauzinha: envio por e-mail usando EmailJS */
-const girlfriendMessage = $("#girlfriendMessage");
-const messageFeedback = $("#messageFeedback");
+<section class="girlfriend-letter">
+  <h2>💌 Um espacinho só teu</h2>
 
-$("#copyGirlfriendMessage").addEventListener("click", async () => {
-  const message = girlfriendMessage.value.trim();
-  const button = $("#copyGirlfriendMessage");
+  <p>Escreve aqui tua cartinha para o Ravi. ❤️</p>
 
-  if (!message) {
-    messageFeedback.textContent =
-      "Escreve uma cartinha primeiro, meu amor. 💗";
-    girlfriendMessage.focus();
-    return;
-  }
+  <textarea
+    id="girlfriendMessage"
+    placeholder="Escreve tua mensagem aqui..."
+    rows="6"
+  ></textarea>
 
-  if (!window.emailjs) {
-    messageFeedback.textContent =
-      "O serviço de e-mail não carregou. Atualiza a página e tenta novamente. 💗";
-    return;
-  }
+  <div class="letter-buttons">
+    <button id="copyGirlfriendMessage" type="button">
+      Enviar cartinha 💌
+    </button>
 
-  button.disabled = true;
-  messageFeedback.textContent =
-    "Enviando tua cartinha para o Ravi... 💌";
+    <button id="clearGirlfriendMessage" type="button">
+      Limpar
+    </button>
+  </div>
 
-  try {
-    await window.emailjs.send(
-      "service_ykiix53",
-      "template_poa1fzq",
-      {
-        message: message
-      }
-    );
+  <p id="messageFeedback" role="status" aria-live="polite"></p>
+</section>
 
-    messageFeedback.textContent =
-      "Cartinha enviada para o Ravi! ❤️💌";
-  } catch (error) {
-    console.error("Erro ao enviar a cartinha:", error);
+<!-- Carrega as bibliotecas antes do script.js -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    messageFeedback.textContent =
-      "Não foi possível enviar. Confere o EmailJS e tenta novamente. 💗";
-  } finally {
-    button.disabled = false;
-  }
-});
+<script>
+  emailjs.init({
+    publicKey: "vIeeEkB4AloiJFR2t"
+  });
+</script>
 
-/* Botão para limpar a cartinha */
-$("#clearGirlfriendMessage").addEventListener("click", () => {
-  girlfriendMessage.value = "";
-  messageFeedback.textContent =
-    "Prontinho, podes escrever outra cartinha. ♡";
-  girlfriendMessage.focus();
-});
+<script src="script.js"></script>
