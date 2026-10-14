@@ -65,15 +65,15 @@ if (sendButton && messageBox && feedback) {
 
       if (emailSent && savedToDatabase) {
         feedback.textContent =
-          "Cartinha enviada por e-mail e salva no painel do Ravi! ❤️💌";
+          "Cartinha enviadae salva para o Ravi! ❤️💌";
         messageBox.value = "";
       } else if (emailSent) {
         feedback.textContent =
-          "O e-mail foi enviado, mas não conseguimos salvar no painel. ❤️";
+          "Cartinha enviada com carinho! ❤️💌";
         messageBox.value = "";
       } else if (savedToDatabase) {
         feedback.textContent =
-          "A cartinha foi salva no painel, mas o e-mail falhou. 💗";
+          "A cartinha foi recebida, pelo seu amor. 💗";
       } else {
         feedback.textContent =
           "O envio falhou. Tenta novamente e verifica o console do navegador. 💗";
