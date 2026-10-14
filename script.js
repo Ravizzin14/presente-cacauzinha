@@ -18,19 +18,21 @@ if (sendButton && messageBox && feedback) {
     const message = messageBox.value.trim();
 
     if (!message) {
-      feedback.textContent = "Escreve tua cartinha primeiro, meu amor. 💗";
+      feedback.textContent =
+        "Meu amor, escreve uma cartinha pra mim. Vou guardar cada palavrinha no coração. 🥹❤️";
       messageBox.focus();
       return;
     }
 
     if (!window.emailjs || !window.supabase) {
       feedback.textContent =
-        "Os serviços ainda não carregaram. Atualiza a página e tenta novamente. 💗";
+        "Meu amor, prepara tua cartinha e tenta mais uma vez. Nosso cantinho merece esse carinho. 💗";
       return;
     }
 
     sendButton.disabled = true;
-    feedback.textContent = "Enviando tua cartinha... 💌";
+    feedback.textContent =
+      "Preparando tua cartinha com todo o carinho do mundo... 💌✨";
 
     let emailSent = false;
     let savedToDatabase = false;
@@ -65,18 +67,15 @@ if (sendButton && messageBox && feedback) {
 
       if (emailSent && savedToDatabase) {
         feedback.textContent =
-          "Cartinha enviadae salva para o Ravi! ❤️💌";
+          "Aaaah, tua cartinha chegou! Cada palavra tua deixa meu cantinho mais especial. Te amo, minha princesa! ❤️💌✨";
         messageBox.value = "";
-      } else if (emailSent) {
+      } else if (emailSent || savedToDatabase) {
         feedback.textContent =
-          "Cartinha enviada com carinho! ❤️💌";
+          "Tua cartinha foi recebida com muito carinho! Obrigado por deixar um pedacinho do teu coração aqui. ❤️🥹";
         messageBox.value = "";
-      } else if (savedToDatabase) {
-        feedback.textContent =
-          "A cartinha foi recebida, pelo seu amor. 💗";
       } else {
         feedback.textContent =
-          "O envio falhou. Tenta novamente e verifica o console do navegador. 💗";
+          "Meu amor, vamos tentar enviar tua cartinha mais uma vez? Quero muito guardar essas palavrinhas especiais. 💗💌";
       }
     } finally {
       sendButton.disabled = false;
@@ -88,7 +87,8 @@ if (clearButton && messageBox && feedback) {
   clearButton.addEventListener("click", (event) => {
     event.preventDefault();
     messageBox.value = "";
-    feedback.textContent = "Prontinho! Podes escrever outra cartinha. ♡";
+    feedback.textContent =
+      "Prontinho, meu amor! O espaço está esperando outra cartinha tua. 💕🌷";
     messageBox.focus();
   });
 }
