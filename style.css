@@ -1,66 +1,188 @@
 
-/* Galáxia romântica */
+/* ===== GALÁXIA ROMÂNTICA • CHUVA CINZA ===== */
+
 :root {
-  --purple: #b58aff;
-  --purple-soft: #e0caff;
-  --red: #c85a91;
-  --red-soft: #f1a6ca;
-  --line: rgba(190, 145, 255, .25);
-  --panel: rgba(17, 10, 31, .84);
-  --panel-strong: rgba(12, 7, 23, .96);
+  --bg: #08090d;
+  --panel: rgba(18, 19, 25, .86);
+  --panel-strong: rgba(12, 13, 18, .96);
+  --purple: #9990bd;
+  --purple-soft: #d1ccdf;
+  --red: #a75c70;
+  --red-soft: #d4a0ad;
+  --text: #f0eff4;
+  --muted: #aaaab6;
+  --line: rgba(190, 190, 210, .17);
+  --shadow: 0 18px 60px rgba(0, 0, 0, .42);
 }
 
+html {
+  background: #08090d;
+  scrollbar-color: #55545f #0c0d12;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 50% 0%,
+      rgba(103, 99, 126, .18), transparent 48%),
+    radial-gradient(ellipse at 15% 65%,
+      rgba(75, 78, 100, .12), transparent 38%),
+    radial-gradient(ellipse at 90% 85%,
+      rgba(103, 58, 76, .09), transparent 35%),
+    linear-gradient(180deg, #07080c, #101117 52%, #08090d);
+  background-attachment: fixed;
+}
+
+/* Chuva cinza suave */
+body::before {
+  opacity: .20;
+  background-image:
+    repeating-linear-gradient(
+      104deg,
+      transparent 0 45px,
+      rgba(220, 222, 235, .30) 46px,
+      transparent 47px 105px
+    ),
+    repeating-linear-gradient(
+      108deg,
+      transparent 0 85px,
+      rgba(150, 151, 170, .24) 86px,
+      transparent 87px 160px
+    );
+  background-size: 115px 180px, 175px 245px;
+  animation: rain-drift 8s linear infinite;
+}
+
+@keyframes rain-drift {
+  from { background-position: 0 -180px, 0 -245px; }
+  to { background-position: -35px 180px, 25px 245px; }
+}
+
+/* Névoa cósmica */
+body::after {
+  background:
+    radial-gradient(ellipse at 50% 22%,
+      rgba(135, 130, 166, .10), transparent 48%),
+    radial-gradient(ellipse at 85% 75%,
+      rgba(127, 71, 95, .07), transparent 35%);
+  animation: ambient-glow 16s ease-in-out infinite alternate;
+}
+
+.stars {
+  opacity: .48;
+  background-image:
+    radial-gradient(1px 1px at 12% 24%, #fff, transparent),
+    radial-gradient(2px 2px at 76% 18%, #d7d3e6, transparent),
+    radial-gradient(1px 1px at 54% 68%, #c3bdce, transparent),
+    radial-gradient(1px 1px at 88% 83%, #fff, transparent),
+    radial-gradient(1px 1px at 35% 48%, #b9b5c8, transparent);
+  background-size: 320px 280px;
+}
+
+.nebula {
+  filter: blur(85px);
+  opacity: .09;
+}
+
+.nebula-one { background: #77718f; }
+.nebula-two { background: #825465; }
+
+/* Cartões com aparência de vidro escuro */
 .glass,
-.photo-slot,
-.quiz-card,
-.letter-envelope,
-.message-card,
-.music-card {
-  border-color: rgba(190, 145, 255, .23);
+.photo-slot {
+  background-color: rgba(17, 18, 24, .82);
+  border-color: rgba(190, 190, 210, .17);
   box-shadow:
-    0 18px 55px rgba(0, 0, 0, .30),
-    0 0 28px rgba(124, 72, 190, .07);
+    0 18px 55px rgba(0, 0, 0, .32),
+    inset 0 1px rgba(255, 255, 255, .025);
 }
 
 h1 span,
-h2 span,
-.signature,
-.love-count {
-  color: #d6b8ff;
-  text-shadow: 0 0 20px rgba(171, 113, 255, .24);
+h2 span {
+  color: #d2cddd;
+  text-shadow: 0 0 22px rgba(183, 177, 205, .16);
 }
 
-.music-card {
+.eyebrow,
+.counter-card small,
+.timeline-card small,
+.music-info small {
+  color: #c19ba9;
+}
+
+.moon {
   background:
-    radial-gradient(ellipse at top left, rgba(133, 76, 206, .12), transparent 60%),
-    rgba(15, 9, 27, .92);
+    radial-gradient(circle at 32% 30%,
+      #fff, #d9d8e1 38%, #9293a4 72%, #474653);
+  box-shadow:
+    0 0 28px rgba(215, 215, 230, .23),
+    0 0 85px rgba(160, 160, 185, .10);
+}
+
+.moon span {
+  background: #100f17;
+}
+
+button,
+.primary-btn {
+  background: linear-gradient(
+    120deg,
+    rgba(65, 65, 83, .97),
+    rgba(77, 43, 61, .97)
+  );
+  border-color: rgba(195, 190, 211, .25);
+}
+
+button:hover:not(:disabled) {
+  border-color: rgba(221, 208, 230, .5);
+  box-shadow: 0 0 22px rgba(177, 169, 202, .10);
+}
+
+.secondary-btn,
+.answer-btn,
+.music-toggle,
+.collect-heart {
+  background: rgba(25, 25, 34, .88);
+}
+
+.counter-icon,
+.timeline-dot,
+.quiz-progress,
+.quiz-feedback,
+.signature,
+.promise-note,
+.mission-prize,
+.love-count {
+  color: #c9c3d5;
+}
+
+.letter-content {
+  background: rgba(5, 6, 10, .48);
+  border-color: rgba(174, 111, 133, .18);
+}
+
+.big-heart,
+.brand span,
+footer span {
+  color: #c17b91;
+  text-shadow: 0 0 18px rgba(193, 123, 145, .22);
+}
+
+textarea,
+input,
+select {
+  background: rgba(8, 9, 14, .88);
+  border-color: rgba(180, 180, 200, .23);
 }
 
 .vinyl {
-  animation: vinyl-glow 5s ease-in-out infinite alternate;
-}
-
-@keyframes vinyl-glow {
-  from {
-    box-shadow: 0 0 0 5px #26162e,
-      0 0 20px rgba(169, 107, 255, .12);
-  }
-  to {
-    box-shadow: 0 0 0 5px #30203f,
-      0 0 34px rgba(169, 107, 255, .32);
-  }
-}
-
-button {
-  background: linear-gradient(
-    115deg,
-    rgba(100, 56, 155, .96),
-    rgba(91, 35, 94, .96)
-  );
+  box-shadow:
+    0 0 0 5px #25242d,
+    0 0 28px rgba(185, 180, 205, .12);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .vinyl {
+  body::before,
+  body::after {
     animation: none;
   }
 }
