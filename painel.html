@@ -31,65 +31,83 @@
     button.secondary { background: #302c38; }
     .muted { color: #b8b4c2; }
     .message { white-space: pre-wrap; overflow-wrap: anywhere; }
-    #status { white-space: pre-wrap; }
-    .hidden { display: none; }
+    #status { white-space: pre-wrap; overflow-wrap: anywhere; }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
 <main>
   <h1>❤️ Painel do Ravi</h1>
-  <p class="muted">Nosso cantinho privado • Ravi & Cacauzinha</p>
+  <p class="muted">Nosso cantinho privado • Ravi &amp; Cacauzinha</p>
 
-  <section id="login" class="card">
+  <section id="login" class="card hidden">
     <h2>Entrar no painel 🔒</h2>
     <form id="loginForm">
-      <input id="email" type="email" placeholder="E-mail da tua conta"
+      <input id="email" type="email" placeholder="Teu e-mail"
         autocomplete="username" required>
       <input id="password" type="password" placeholder="Senha"
         autocomplete="current-password" required>
       <button type="submit">Entrar ❤️</button>
+    </form>
+    <button type="button" id="forgotPassword" class="secondary">
+      Esqueci a senha
+    </button>
+  </section>
+
+  <section id="newPassword" class="card hidden">
+    <h2>Criar senha nova 🔐</h2>
+    <form id="newPasswordForm">
+      <input id="newPass" type="password" minlength="8"
+        autocomplete="new-password" placeholder="Nova senha (mínimo 8 caracteres)"
+        required>
+      <input id="confirmPass" type="password" minlength="8"
+        autocomplete="new-password" placeholder="Confirma a nova senha"
+        required>
+      <button type="submit">Guardar senha nova ❤️</button>
     </form>
   </section>
 
   <section id="dashboard" class="hidden">
     <div class="card">
       <h2>Cartinhas recebidas 💌</h2>
-      <p class="muted">As mensagens guardadas no teu Supabase aparecem aqui.</p>
+      <p class="muted">Mensagens guardadas no Supabase.</p>
       <button id="refresh">Atualizar cartinhas</button>
       <button id="logout" class="secondary">Sair da conta</button>
     </div>
     <div id="messages"></div>
   </section>
 
-  <p id="status" class="muted" role="status"></p>
+  <p id="status" class="muted" role="status" aria-live="polite"></p>
 </main>
 
 <script>
-  // SUBSTITUI estes dois valores pelos dados do teu projeto.
-  const SUPABASE_URL = "https://fghpeawhvvhmfijlrcvl.supabase.co/rest/v1/";
-  const SUPABASE_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnaHBlYXdodnZobWZpamxyY3ZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE5MTAzOTAsImV4cCI6MjEwNzQ4NjM5MH0.twZUqxKmlgyNOWXCwSP-yI7dBC0GJujMtUBKm06w8GE";
+  // A URL base não deve terminar em /rest/v1/
+  const SUPABASE_URL = "https://fghpeawhvvhmfijlrcvl.supabase.co";
+
+  // Cola a tua chave anon public OU publishable entre estas aspas.
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnaHBlYXdodnZobWZpamxyY3ZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE5MTAzOTAsImV4cCI6MjEwNzQ4NjM5MH0.twZUqxKmlgyNOWXCwSP-yI7dBC0GJujMtUBKm06w8GE";
 
   const status = document.getElementById("status");
   const login = document.getElementById("login");
   const dashboard = document.getElementById("dashboard");
+  const newPassword = document.getElementById("newPassword");
   const messages = document.getElementById("messages");
 
   let db = null;
+  let recoveryMode = false;
 
   if (window.supabase &&
-      SUPABASE_URL.startsWith("https://") &&
-      !SUPABASE_URL.includes("COLOCA_AQUI") &&
-      SUPABASE_KEY &&
-      !SUPABASE_KEY.includes("COLOCA_AQUI")) {
+      SUPABASE_KEY !== "COLOCA_AQUI_TUA_CHAVE_PUBLICA" &&
+      SUPABASE_KEY.length > 20) {
     db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   } else {
-    status.textContent =
-      "Falta configurar a Project URL e a chave pública do Supabase.";
+    status.textContent = "Falta colocar a chave pública do Supabase no código.";
   }
 
-  function showSession(session) {
-    login.classList.toggle("hidden", !!session);
-    dashboard.classList.toggle("hidden", !session);
+  function showScreen(screen) {
+    login.classList.toggle("hidden", screen !== "login");
+    dashboard.classList.toggle("hidden", screen !== "dashboard");
+    newPassword.classList.toggle("hidden", screen !== "password");
   }
 
   async function loadMessages() {
@@ -103,7 +121,7 @@
       .order("created_at", { ascending: false });
 
     if (error) {
-      status.textContent = "Não foi possível carregar: " + error.message;
+      status.textContent = "Erro ao carregar mensagens: " + error.message;
       return;
     }
 
@@ -143,14 +161,11 @@
   document.getElementById("loginForm").addEventListener("submit",
     async (event) => {
       event.preventDefault();
-      if (!db) {
-        status.textContent = "Configura primeiro os dados do Supabase.";
-        return;
-      }
+      if (!db) return;
 
       status.textContent = "A entrar...";
       const { error } = await db.auth.signInWithPassword({
-        email: document.getElementById("email").value,
+        email: document.getElementById("email").value.trim(),
         password: document.getElementById("password").value
       });
 
@@ -159,10 +174,63 @@
         return;
       }
 
-      status.textContent = "Login efetuado!";
-      const { data } = await db.auth.getSession();
-      showSession(data.session);
+      recoveryMode = false;
+      showScreen("dashboard");
       await loadMessages();
+    }
+  );
+
+  document.getElementById("forgotPassword").addEventListener("click",
+    async () => {
+      if (!db) return;
+
+      const email = document.getElementById("email").value.trim();
+      if (!email) {
+        status.textContent = "Escreve o teu e-mail no campo acima primeiro.";
+        document.getElementById("email").focus();
+        return;
+      }
+
+      status.textContent = "A enviar pedido de recuperação...";
+      const { error } = await db.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + window.location.pathname
+      });
+
+      status.textContent = error
+        ? "Não foi possível enviar: " + error.message
+        : "Se a conta existir, receberás um e-mail de recuperação. Verifica também o spam.";
+    }
+  );
+
+  document.getElementById("newPasswordForm").addEventListener("submit",
+    async (event) => {
+      event.preventDefault();
+      if (!db || !recoveryMode) return;
+
+      const pass = document.getElementById("newPass").value;
+      const confirm = document.getElementById("confirmPass").value;
+
+      if (pass.length < 8) {
+        status.textContent = "A senha deve ter pelo menos 8 caracteres.";
+        return;
+      }
+      if (pass !== confirm) {
+        status.textContent = "As senhas não coincidem.";
+        return;
+      }
+
+      status.textContent = "A guardar a senha nova...";
+      const { error } = await db.auth.updateUser({ password: pass });
+
+      if (error) {
+        status.textContent = "Erro ao mudar a senha: " + error.message;
+        return;
+      }
+
+      recoveryMode = false;
+      document.getElementById("newPasswordForm").reset();
+      status.textContent = "Senha alterada! Já podes entrar com a senha nova.";
+      showScreen("login");
     }
   );
 
@@ -171,19 +239,42 @@
   document.getElementById("logout").addEventListener("click", async () => {
     if (!db) return;
     await db.auth.signOut();
-    showSession(null);
+    recoveryMode = false;
+    showScreen("login");
     messages.replaceChildren();
     status.textContent = "Saíste da conta.";
   });
 
   async function init() {
-    if (!db) return;
-    const { data } = await db.auth.getSession();
-    showSession(data.session);
-    if (data.session) await loadMessages();
+    if (!db) {
+      showScreen("login");
+      return;
+    }
 
-    db.auth.onAuthStateChange((_event, session) => {
-      showSession(session);
+    const { data, error } = await db.auth.getSession();
+
+    if (error) {
+      status.textContent = "Erro ao verificar sessão: " + error.message;
+    }
+
+    if (data.session) {
+      showScreen("dashboard");
+      await loadMessages();
+    } else {
+      showScreen("login");
+    }
+
+    db.auth.onAuthStateChange(async (event, session) => {
+      if (event === "PASSWORD_RECOVERY") {
+        recoveryMode = true;
+        showScreen("password");
+        status.textContent = "Agora define a tua senha nova.";
+      } else if (event === "SIGNED_IN" && !recoveryMode) {
+        showScreen("dashboard");
+      } else if (event === "SIGNED_OUT") {
+        recoveryMode = false;
+        showScreen("login");
+      }
     });
   }
 
