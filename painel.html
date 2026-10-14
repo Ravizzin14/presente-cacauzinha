@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel do Ravi ❤️</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; padding: 24px;
+      background: #09090d; color: #f5f5f5;
+      font-family: Arial, sans-serif;
+    }
+    main { max-width: 760px; margin: 35px auto; }
+    h1 { color: #ff303e; }
+    .card {
+      background: #15151d; border: 1px solid #34303c;
+      border-radius: 16px; padding: 20px; margin: 16px 0;
+    }
+    input, button {
+      width: 100%; padding: 13px; margin-top: 10px;
+      border-radius: 9px; font-size: 16px;
+    }
+    input { background: #09090d; color: white; border: 1px solid #444; }
+    button {
+      background: #ff303e; color: white; border: 0;
+      font-weight: bold; cursor: pointer;
+    }
+    button.secondary { background: #302c38; }
+    .muted { color: #b8b4c2; }
+    .message { white-space: pre-wrap; overflow-wrap: anywhere; }
+    #status { white-space: pre-wrap; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>❤️ Painel do Ravi</h1>
+  <p class="muted">Nosso cantinho privado • Ravi & Cacauzinha</p>
+
+  <section id="login" class="card">
+    <h2>Entrar no painel 🔒</h2>
+    <form id="loginForm">
+      <input id="email" type="email" placeholder="E-mail da tua conta"
+        autocomplete="username" required>
+      <input id="password" type="password" placeholder="Senha"
+        autocomplete="current-password" required>
+      <button type="submit">Entrar ❤️</button>
+    </form>
+  </section>
+
+  <section id="dashboard" class="hidden">
+    <div class="card">
+      <h2>Cartinhas recebidas 💌</h2>
+      <p class="muted">As mensagens guardadas no teu Supabase aparecem aqui.</p>
+      <button id="refresh">Atualizar cartinhas</button>
+      <button id="logout" class="secondary">Sair da conta</button>
+    </div>
+    <div id="messages"></div>
+  </section>
+
+  <p id="status" class="muted" role="status"></p>
+</main>
+
+<script>
+  // SUBSTITUI estes dois valores pelos dados do teu projeto.
+  const SUPABASE_URL = "COLOCA_AQUI_TUA_PROJECT_URL";
+  const SUPABASE_KEY = "COLOCA_AQUI_TUA_CHAVE_PUBLICA";
+
+  const status = document.getElementById("status");
+  const login = document.getElementById("login");
+  const dashboard = document.getElementById("dashboard");
+  const messages = document.getElementById("messages");
+
+  let db = null;
+
+  if (window.supabase &&
+      SUPABASE_URL.startsWith("https://") &&
+      !SUPABASE_URL.includes("COLOCA_AQUI") &&
+      SUPABASE_KEY &&
+      !SUPABASE_KEY.includes("COLOCA_AQUI")) {
+    db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  } else {
+    status.textContent =
+      "Falta configurar a Project URL e a chave pública do Supabase.";
+  }
+
+  function showSession(session) {
+    login.classList.toggle("hidden", !!session);
+    dashboard.classList.toggle("hidden", !session);
+  }
+
+  async function loadMessages() {
+    if (!db) return;
+    status.textContent = "A carregar as cartinhas...";
+    messages.replaceChildren();
+
+    const { data, error } = await db
+      .from("mensagens")
+      .select("id, created_at, cartinha, respostas, remetente, finalizado")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      status.textContent = "Não foi possível carregar: " + error.message;
+      return;
+    }
+
+    status.textContent = data.length
+      ? data.length + " mensagem(ns) encontrada(s)."
+      : "Ainda não há cartinhas guardadas.";
+
+    for (const item of data) {
+      const card = document.createElement("article");
+      card.className = "card";
+
+      const title = document.createElement("h2");
+      title.textContent = "💌 " + (item.remetente || "Cartinha");
+
+      const date = document.createElement("p");
+      date.className = "muted";
+      date.textContent = item.created_at
+        ? new Date(item.created_at).toLocaleString("pt-BR")
+        : "Data não informada";
+
+      const letter = document.createElement("p");
+      letter.className = "message";
+      letter.textContent = item.cartinha || "Sem texto de cartinha.";
+
+      const answerTitle = document.createElement("h3");
+      answerTitle.textContent = "Respostas ❤️";
+
+      const answers = document.createElement("pre");
+      answers.className = "message";
+      answers.textContent = JSON.stringify(item.respostas || {}, null, 2);
+
+      card.append(title, date, letter, answerTitle, answers);
+      messages.appendChild(card);
+    }
+  }
+
+  document.getElementById("loginForm").addEventListener("submit",
+    async (event) => {
+      event.preventDefault();
+      if (!db) {
+        status.textContent = "Configura primeiro os dados do Supabase.";
+        return;
+      }
+
+      status.textContent = "A entrar...";
+      const { error } = await db.auth.signInWithPassword({
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value
+      });
+
+      if (error) {
+        status.textContent = "Erro ao entrar: " + error.message;
+        return;
+      }
+
+      status.textContent = "Login efetuado!";
+      const { data } = await db.auth.getSession();
+      showSession(data.session);
+      await loadMessages();
+    }
+  );
+
+  document.getElementById("refresh").addEventListener("click", loadMessages);
+
+  document.getElementById("logout").addEventListener("click", async () => {
+    if (!db) return;
+    await db.auth.signOut();
+    showSession(null);
+    messages.replaceChildren();
+    status.textContent = "Saíste da conta.";
+  });
+
+  async function init() {
+    if (!db) return;
+    const { data } = await db.auth.getSession();
+    showSession(data.session);
+    if (data.session) await loadMessages();
+
+    db.auth.onAuthStateChange((_event, session) => {
+      showSession(session);
+    });
+  }
+
+  init();
+</script>
+</body>
+</html>
