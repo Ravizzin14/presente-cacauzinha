@@ -1,94 +1,101 @@
 
-/* Cartinha da Cacauzinha: EmailJS + Supabase */
-const girlfriendMessage = $("#girlfriendMessage");
-const messageFeedback = $("#messageFeedback");
-const sendLetterButton = $("#copyGirlfriendMessage");
-const clearLetterButton = $("#clearGirlfriendMessage");
+/* CARTINHA DA CACAUZINHA — EMAILJS + SUPABASE */
 
-sendLetterButton.addEventListener("click", async () => {
-  const message = girlfriendMessage.value.trim();
+const girlfriendMessage = document.querySelector("#girlfriendMessage");
+const messageFeedback = document.querySelector("#messageFeedback");
+const sendLetterButton = document.querySelector("#copyGirlfriendMessage");
+const clearLetterButton = document.querySelector("#clearGirlfriendMessage");
 
-  if (!message) {
-    messageFeedback.textContent =
-      "Escreve uma cartinha primeiro, meu amor. 💗";
-    girlfriendMessage.focus();
-    return;
-  }
+if (
+  girlfriendMessage &&
+  messageFeedback &&
+  sendLetterButton &&
+  clearLetterButton
+) {
+  sendLetterButton.addEventListener("click", async () => {
+    const message = girlfriendMessage.value.trim();
 
-  if (!window.emailjs && !window.supabase) {
-    messageFeedback.textContent =
-      "Os serviços não carregaram. Atualiza a página e tenta novamente. 💗";
-    return;
-  }
+    if (!message) {
+      messageFeedback.textContent =
+        "Escreve tua cartinha primeiro. 💗";
+      girlfriendMessage.focus();
+      return;
+    }
 
-  sendLetterButton.disabled = true;
-  messageFeedback.textContent =
-    "Enviando tua cartinha para o Ravi... 💌";
+    sendLetterButton.disabled = true;
+    messageFeedback.textContent = "Enviando tua cartinha... 💌";
 
-  try {
     let emailSent = false;
     let savedToDatabase = false;
 
-    // Envia para o Gmail através do EmailJS
-    if (window.emailjs) {
-      try {
-        await window.emailjs.send(
-          "service_ykiix53",
-          "template_poa1fzq",
-          { message }
-        );
-        emailSent = true;
-      } catch (error) {
-        console.error("Erro no EmailJS:", error);
+    try {
+      // 1. Enviar por e-mail
+      if (window.emailjs) {
+        try {
+          await window.emailjs.send(
+            "service_ykiix53",
+            "template_poa1fzq",
+            { message: message }
+          );
+          emailSent = true;
+        } catch (error) {
+          console.error("Erro ao enviar e-mail:", error);
+        }
       }
-    }
 
-    // Guarda uma cópia no Supabase
-    if (window.supabase) {
-      try {
-        const db = window.supabase.createClient(
-          "https://ektxoaljvogbeyyllwvw.supabase.co",
-          "sb_publishable_JE4fy-T8wUDcmRUh0nO0Tw_Jum8bOaX"
-        );
+      // 2. Guardar no Supabase
+      if (window.supabase) {
+        try {
+          const db = window.supabase.createClient(
+            "https://ektxoaljvogbeyyllwvw.supabase.co",
+            "sb_publishable_JE4fy-T8wUDcmRUh0nO0Tw_Jum8bOaX"
+          );
 
-        const { error } = await db
-          .from("respostas_cacau")
-          .insert([{
-            cartinha: message,
-            quiz_concluido: false
-          }]);
+          const { error } = await db
+            .from("respostas_cacau")
+            .insert([
+              {
+                cartinha: message,
+                quiz_concluido: false
+              }
+            ]);
 
-        if (error) throw error;
-        savedToDatabase = true;
-      } catch (error) {
-        console.error("Erro no Supabase:", error);
+          if (error) throw error;
+          savedToDatabase = true;
+        } catch (error) {
+          console.error("Erro ao guardar no painel:", error);
+        }
       }
-    }
 
-    if (emailSent && savedToDatabase) {
+      if (emailSent && savedToDatabase) {
+        messageFeedback.textContent =
+          "Cartinha enviada por e-mail e guardada no painel! ❤️";
+        girlfriendMessage.value = "";
+      } else if (emailSent) {
+        messageFeedback.textContent =
+          "E-mail enviado! ❤️ Mas não foi possível guardar no painel.";
+        girlfriendMessage.value = "";
+      } else if (savedToDatabase) {
+        messageFeedback.textContent =
+          "Cartinha guardada no painel! ❤️ Mas o e-mail não foi enviado.";
+        girlfriendMessage.value = "";
+      } else {
+        messageFeedback.textContent =
+          "Não foi possível enviar. Verifica as configurações e tenta novamente. 💗";
+      }
+    } catch (error) {
+      console.error("Erro inesperado:", error);
       messageFeedback.textContent =
-        "Cartinha enviada por e-mail e guardada no painel! ❤️💌";
-      girlfriendMessage.value = "";
-    } else if (emailSent) {
-      messageFeedback.textContent =
-        "E-mail enviado para o Ravi! ❤️ A cópia no painel não foi guardada.";
-      girlfriendMessage.value = "";
-    } else if (savedToDatabase) {
-      messageFeedback.textContent =
-        "Cartinha guardada no painel! ❤️ O e-mail não foi enviado.";
-      girlfriendMessage.value = "";
-    } else {
-      messageFeedback.textContent =
-        "Não foi possível enviar. Confere o EmailJS e o Supabase. 💗";
+        "Ocorreu um erro. Tenta novamente. 💗";
+    } finally {
+      sendLetterButton.disabled = false;
     }
-  } finally {
-    sendLetterButton.disabled = false;
-  }
-});
+  });
 
-clearLetterButton.addEventListener("click", () => {
-  girlfriendMessage.value = "";
-  messageFeedback.textContent =
-    "Prontinho, podes escrever outra cartinha. ♡";
-  girlfriendMessage.focus();
-});
+  clearLetterButton.addEventListener("click", () => {
+    girlfriendMessage.value = "";
+    messageFeedback.textContent =
+      "Prontinho! Podes escrever outra cartinha. ♡";
+    girlfriendMessage.focus();
+  });
+}
