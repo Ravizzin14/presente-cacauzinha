@@ -1,11 +1,12 @@
 
-/* Cartinha da Cacauzinha: envia diretamente ao Supabase */
+/* Cartinha da Cacauzinha: EmailJS + Supabase */
 const girlfriendMessage = $("#girlfriendMessage");
 const messageFeedback = $("#messageFeedback");
+const sendLetterButton = $("#copyGirlfriendMessage");
+const clearLetterButton = $("#clearGirlfriendMessage");
 
-$("#copyGirlfriendMessage").addEventListener("click", async () => {
+sendLetterButton.addEventListener("click", async () => {
   const message = girlfriendMessage.value.trim();
-  const button = $("#copyGirlfriendMessage");
 
   if (!message) {
     messageFeedback.textContent =
@@ -14,49 +15,78 @@ $("#copyGirlfriendMessage").addEventListener("click", async () => {
     return;
   }
 
-  button.disabled = true;
+  if (!window.emailjs && !window.supabase) {
+    messageFeedback.textContent =
+      "Os serviços não carregaram. Atualiza a página e tenta novamente. 💗";
+    return;
+  }
+
+  sendLetterButton.disabled = true;
   messageFeedback.textContent =
     "Enviando tua cartinha para o Ravi... 💌";
 
   try {
-    if (!window.supabase) {
-      throw new Error("A biblioteca do Supabase não carregou.");
+    let emailSent = false;
+    let savedToDatabase = false;
+
+    // Envia para o Gmail através do EmailJS
+    if (window.emailjs) {
+      try {
+        await window.emailjs.send(
+          "service_ykiix53",
+          "template_poa1fzq",
+          { message }
+        );
+        emailSent = true;
+      } catch (error) {
+        console.error("Erro no EmailJS:", error);
+      }
     }
 
-    const db = window.supabase.createClient(
-      "https://ektxoaljvogbeyyllwvw.supabase.co",
-      "sb_publishable_JE4fy-T8wUDcmRUh0nO0Tw_Jum8bOaX"
-    );
+    // Guarda uma cópia no Supabase
+    if (window.supabase) {
+      try {
+        const db = window.supabase.createClient(
+          "https://ektxoaljvogbeyyllwvw.supabase.co",
+          "sb_publishable_JE4fy-T8wUDcmRUh0nO0Tw_Jum8bOaX"
+        );
 
-    const { error } = await db
-      .from("respostas_cacau")
-      .insert([
-        {
-          cartinha: message,
-          quiz_concluido: false
-        }
-      ]);
+        const { error } = await db
+          .from("respostas_cacau")
+          .insert([{
+            cartinha: message,
+            quiz_concluido: false
+          }]);
 
-    if (error) {
-      throw error;
+        if (error) throw error;
+        savedToDatabase = true;
+      } catch (error) {
+        console.error("Erro no Supabase:", error);
+      }
     }
 
-    messageFeedback.textContent =
-      "Cartinha enviada com carinho! ❤️💌";
-
-    girlfriendMessage.value = "";
-  } catch (error) {
-    console.error("Erro ao enviar cartinha:", error);
-
-    messageFeedback.textContent =
-      "Não conseguimos enviar agora. Confere a conexão e tenta novamente. 💗";
+    if (emailSent && savedToDatabase) {
+      messageFeedback.textContent =
+        "Cartinha enviada por e-mail e guardada no painel! ❤️💌";
+      girlfriendMessage.value = "";
+    } else if (emailSent) {
+      messageFeedback.textContent =
+        "E-mail enviado para o Ravi! ❤️ A cópia no painel não foi guardada.";
+      girlfriendMessage.value = "";
+    } else if (savedToDatabase) {
+      messageFeedback.textContent =
+        "Cartinha guardada no painel! ❤️ O e-mail não foi enviado.";
+      girlfriendMessage.value = "";
+    } else {
+      messageFeedback.textContent =
+        "Não foi possível enviar. Confere o EmailJS e o Supabase. 💗";
+    }
   } finally {
-    button.disabled = false;
+    sendLetterButton.disabled = false;
   }
 });
 
-/* Botão para limpar a cartinha */
-$("#clearGirlfriendMessage").addEventListener("click", () => {
+clearLetterButton.addEventListener("click", () => {
   girlfriendMessage.value = "";
   messageFeedback.textContent =
     "Prontinho, podes escrever outra cartinha. ♡";
